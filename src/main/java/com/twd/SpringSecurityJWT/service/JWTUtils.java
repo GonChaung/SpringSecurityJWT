@@ -50,4 +50,14 @@ public class JWTUtils {
     private <T> T extractClaims(String token, Function<Claims,T> claimsTFunction){
         return claimsTFunction.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
     }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String userName = extractUsername(token);
+        return (userName.equals(userDetails.getUsername())&&!isTokenExpired(token));
+
+    }
+
+    public boolean isTokenExpired(String token){
+        return extractClaims(token, Claims::getExpiration).before(new Date());
+    }
 }
