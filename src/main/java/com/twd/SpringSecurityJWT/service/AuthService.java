@@ -28,6 +28,7 @@ public class AuthService {
         ReqRes resp = new ReqRes();
         try {
             OurUsers ourUsers = new OurUsers();
+            ourUsers.setName(registrationRequest.getName());
             ourUsers.setEmail(registrationRequest.getEmail());
             ourUsers.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             ourUsers.setRole(registrationRequest.getRole());
