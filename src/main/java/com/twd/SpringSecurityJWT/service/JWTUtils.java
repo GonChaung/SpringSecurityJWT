@@ -15,16 +15,16 @@ import java.util.function.Function;
 
 @Component
 public class JWTUtils {
-    private SecretKey Key;
-    private static final long EXPIRATION_TIME = 86400000; //24 hrs or milliseconds
 
+    private SecretKey Key;
+    private  static  final long EXPIRATION_TIME = 86400000; //24hours or 86400000 milisecs
     public JWTUtils(){
-        String secretString = "432452454554AKJKII997979HHHIE8989897IEEET44";
-        byte[] keyBytes = Base64.getDecoder().decode(secretString.getBytes(StandardCharsets.UTF_8));
+        String secreteString = "843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3";
+        byte[] keyBytes = Base64.getDecoder().decode(secreteString.getBytes(StandardCharsets.UTF_8));
         this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    public String generatedToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails){
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -32,8 +32,7 @@ public class JWTUtils {
                 .signWith(Key)
                 .compact();
     }
-
-    public String generatedRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
+    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
         return Jwts.builder()
                 .claims(claims)
                 .subject(userDetails.getUsername())
@@ -43,21 +42,19 @@ public class JWTUtils {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractUsername(String token){
         return extractClaims(token, Claims::getSubject);
     }
-
-    private <T> T extractClaims(String token, Function<Claims,T> claimsTFunction){
+    private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction){
         return claimsTFunction.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String userName = extractUsername(token);
-        return (userName.equals(userDetails.getUsername())&&!isTokenExpired(token));
-
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
     public boolean isTokenExpired(String token){
         return extractClaims(token, Claims::getExpiration).before(new Date());
     }
+
 }

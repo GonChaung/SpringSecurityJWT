@@ -20,11 +20,11 @@ public class OurUsers implements UserDetails {
     private String email;
     private String password;
     private String role;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
+
 
     @Override
     public String getUsername() {
@@ -50,5 +50,4 @@ public class OurUsers implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
